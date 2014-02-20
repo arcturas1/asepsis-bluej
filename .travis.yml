@@ -12,4 +12,4 @@ jdk:
  - openjdk7
  - openjdk6
 
-script: ./gradlew cucumber
+script: ./gradlew cucumber -q
