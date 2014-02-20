@@ -1,8 +1,15 @@
 language: java
 
+env:
+ - DISPLAY=:99.0
+
 before_install:
- - chmod +x gradlew
- - "export DISPLAY=:99.0"
+ - chmod +x gradlew # TODO: permission exceptions on Travis without this, fix later
  - "sh -e /etc/init.d/xvfb start"
- 
+
+jdk:
+ - oraclejdk7
+ - openjdk7
+ - openjdk6
+
 script: ./gradlew cucumber
