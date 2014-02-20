@@ -1,4 +1,4 @@
-ASEPSiS BlueJ Extension
+ASEPSiS BlueJ Extension [![Build Status](https://travis-ci.org/olerass/asepsis-bluej.png?branch=master)](https://travis-ci.org/olerass/asepsis-bluej)
 ======
 ASEPSiS is a collection of tools that support the processes around programming assignments in the teaching of programming.
 While the primary goal is to support these processes, another important aspect is the quality of the software itself.
