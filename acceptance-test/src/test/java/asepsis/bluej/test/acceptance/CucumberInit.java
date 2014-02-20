@@ -14,6 +14,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+/**
+ * General setup for Cucumber.
+ */
 public class CucumberInit {
     private Robot cleaningRobot;
     private Thread t;
@@ -24,6 +27,9 @@ public class CucumberInit {
         return mainFrame;
     }
 
+    /**
+     * Starts BlueJ in a new thread.
+     */
     @Before
     public void before() throws InterruptedException, InvocationTargetException {
         cleaningRobot = BasicRobot.robotWithNewAwtHierarchy();
@@ -61,11 +67,15 @@ public class CucumberInit {
         mainFrame = new JFrameOperator("BlueJ");
     }
 
+    /**
+     * Shuts down BlueJ and kills the starting thread.
+     */
     @After
     public void after() throws InterruptedException {
         t.stop();
         t.join();
         cleaningRobot.cleanUp();
         sec.uninstall();
+        System.gc(); // Allow JVM to cleanup disposed windows
     }
 }

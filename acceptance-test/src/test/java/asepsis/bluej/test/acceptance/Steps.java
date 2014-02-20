@@ -19,9 +19,7 @@ public class Steps {
 
     @When("^I open the installed extensions window$")
     public void I_open_the_installed_extensions_window() throws Throwable {
-        Thread.sleep(2000);
         new JMenuBarOperator(bluejFrame()).pushMenuNoBlock("Help|Installed Extensions");
-        Thread.sleep(2000);
         extensionsDialog = new JDialogOperator("BlueJ:  Installed Extensions");
     }
 
