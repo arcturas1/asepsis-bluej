@@ -1,0 +1,35 @@
+apply from: project.file('cucumber.gradle')
+
+cucumber {
+    formats = ['pretty', "html:$buildDir/reports/cucumber"]
+    gluePackages = ['asepsis.bluej.test.acceptance']
+    environmentVars = ['bluej-jar':file('minimal-bluej/3.1.0/bluej.jar').absolutePath]
+}
+cucumber.dependsOn 'fix'
+cucumber.finalizedBy 'unfix'
+
+repositories {
+    flatDir(dir: "${projectDir}/local-repo")
+    mavenCentral()
+}
+
+dependencies {
+    testCompile name: 'jemmy', version: '2.3.1.1'
+    testCompile 'org.easytesting:fest-swing:1.2.1'
+}
+
+/*********************************/
+/*****         TASKS         *****/
+/*********************************/
+task fix(dependsOn: ':bluej-extension:jar', type: Copy) {
+  from tasks.getByPath(':bluej-extension:jar')
+  into 'minimal-bluej/3.1.0/extensions'
+}
+
+task unfix(type: Delete) {
+	def fileNames = fix.inputs.files.files.collect { it.name }
+	def dir = fix.outputs.files.iterator().next().absolutePath
+	def files = fileNames.collect { "$dir\\$it" }
+	delete files
+}
+clean.finalizedBy unfix

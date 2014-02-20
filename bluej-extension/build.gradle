@@ -1,0 +1,17 @@
+apply plugin: 'java'
+version = '0.1-SNAPSHOT'
+archivesBaseName = 'asepsis-bluej'
+
+repositories {
+    flatDir(dir: "${projectDir}/local-repo")
+}
+
+dependencies {
+    compile name: 'bluejext', version: '3.1.0'
+}
+
+jar {
+    manifest {
+	    attributes 'Main-Class': 'asepsis.bluej.BluejExtension'
+	}
+}
