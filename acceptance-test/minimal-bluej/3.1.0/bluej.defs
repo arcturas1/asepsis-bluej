@@ -630,3 +630,6 @@ image.extmgr.info=extmgr-info.gif
 
 #inspector object reference arrow
 image.inspector.objectref=objectref.gif
+
+# Disable opt-in dialog when starting BlueJ
+blackbox.uuid=optout
