@@ -16,6 +16,7 @@ repositories {
 dependencies {
     testCompile name: 'jemmy', version: '2.3.1.1'
     testCompile 'org.easytesting:fest-swing:1.2.1'
+    testCompile 'junit:junit:4.11'
 }
 
 /*********************************/
