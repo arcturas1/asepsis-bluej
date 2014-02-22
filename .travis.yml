@@ -1,7 +1,9 @@
 language: java
 
 env:
- - DISPLAY=:99.0
+ - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=2.5.3
+ - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=3.0.0
+ - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=latest
 
 before_install:
  - chmod +x gradlew # TODO: permission exceptions on Travis without this, fix later

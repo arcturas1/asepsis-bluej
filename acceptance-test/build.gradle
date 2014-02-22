@@ -1,12 +1,14 @@
 apply from: project.file('cucumber.gradle')
+apply plugin: 'download-task'
 
-cucumber {
-    formats = ['pretty', "html:$buildDir/reports/cucumber"]
-    gluePackages = ['asepsis.bluej.test.acceptance']
-    environmentVars = ['bluej-jar':file('minimal-bluej/3.1.0/bluej.jar').absolutePath]
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'de.undercouch:gradle-download-task:0.5'
+    }
 }
-cucumber.dependsOn 'fix'
-cucumber.finalizedBy 'unfix'
 
 repositories {
     flatDir(dir: "${projectDir}/local-repo")
@@ -19,15 +21,102 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
+cucumber {
+    formats = ['pretty', "html:$buildDir/reports/cucumber"]
+    gluePackages = ['asepsis.bluej.test.acceptance']
+    environmentVars = ['bluej-jar':file("minimal-bluej/$bluejVer/bluej.jar").absolutePath]
+}
+cucumber.dependsOn 'fix', 'activateCurBluejVer'
+cucumber.finalizedBy 'unfix'
+
 /*********************************/
 /*****         TASKS         *****/
 /*********************************/
+project.beforeEvaluate {
+    // If a specific BlueJ version isn't specified, use the default one (from gradle.properties)
+    if (!hasProperty('bluejVer'))
+        project.setProperty('bluejVer', defaultBluejVer)
+
+    if (bluejVer == 'latest')
+        project.setProperty('bluejVer', getLatestBluejVersion())
+}
+
+String getLatestBluejVersion() {
+    return 'http://www.bluej.org/version.info'.toURL().readLines()[0].trim() // Ex: 3.1.1
+}
+
+void removePropertyFileComment(String fileName) {
+   //def sw = new StringWriter()
+    def content = file(fileName).text
+    content = content.replaceFirst(/.*((\r\n)|(\n))/, '')
+    file(fileName).write(content)
+}
+
 task fix(dependsOn: ':bluej-extension:jar', type: Copy) {
-  from tasks.getByPath(':bluej-extension:jar')
-  into 'minimal-bluej/3.1.0/extensions'
+    from tasks.getByPath(':bluej-extension:jar')
+    into "minimal-bluej/$bluejVer/extensions"
 }
 
 task unfix << {
-   def files = file('minimal-bluej/3.1.0/extensions').listFiles()
-   files.each { it.delete() }
+    def files = file('minimal-bluej/3.1.0/extensions').listFiles()
+    files.each { it.delete() }
+}
+
+task setDefaultBluejVer(description: 'Sets the default tested BlueJ version to the specified (-Pver=<version>) version', group: 'verification') {
+    doLast {
+        ant.propertyfile(file: 'gradle.properties') {
+            entry key: 'defaultBluejVer', value: ver
+        }
+        removePropertyFileComment('gradle.properties')
+
+        def content = file('.gitignore').text
+        content = content.replaceAll(/!minimal-bluej.*/, "!minimal-bluej/$ver")
+        file('.gitignore').write(content)
+    }
+}
+
+task activateCurBluejVer {
+    outputs.upToDateWhen { file("minimal-bluej/$bluejVer").exists() }
+
+    doLast {
+        def bluejVerNoDots = bluejVer.replace('.', '') // Ex: 311
+        def filename = "bluej-${bluejVerNoDots}.jar"
+        def bluejUrl = "http://bluej.org/download/files/$filename"
+        println bluejUrl
+        download {
+            src bluejUrl
+            dest temporaryDir
+        }
+
+        def bluejJar = "$temporaryDir/$filename"
+        copy {
+            from zipTree(bluejJar)
+            into temporaryDir
+            include 'bluej-dist.jar'
+        }
+
+        def bluejDistJar = "$temporaryDir/bluej-dist.jar"
+        def bluejDir = "minimal-bluej/$bluejVer"
+        file(bluejDir).deleteDir()
+        copy {
+            from zipTree(bluejDistJar)
+            into bluejDir
+            include 'lib/'
+            eachFile { FileCopyDetails fcp ->
+                // Remap to root
+                def segments = fcp.relativePath.segments
+                def pathsegments =segments[1..-1] as String[]
+                fcp.relativePath = new RelativePath(!fcp.file.isDirectory(), pathsegments)
+            }
+        }
+
+        // Configure it
+        def bluejDefs = "$bluejDir/bluej.defs"
+        ant.propertyfile(file: bluejDefs) {
+            entry key: 'bluej.autoOpenLastProject', value: 'false' // Don't auto-open projects
+            entry key: 'bluej.debug', value: 'true'                // Don't redirect output to file. It messes with Cucumber output
+            entry key: 'blackbox.uuid', value: 'optout'            // Don't show dialog about blackbox participation when starting
+        }
+        removePropertyFileComment(bluejDefs)
+    }
 }
