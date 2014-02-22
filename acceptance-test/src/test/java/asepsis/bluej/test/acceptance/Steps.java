@@ -7,14 +7,14 @@ import org.netbeans.jemmy.operators.JDialogOperator;
 import org.netbeans.jemmy.operators.JMenuBarOperator;
 import org.netbeans.jemmy.operators.JTableOperator;
 
-import static asepsis.bluej.test.acceptance.CucumberInit.bluejFrame;
+import static asepsis.bluej.test.acceptance.Init.bluejFrame;
 
 public class Steps {
     private JDialogOperator extensionsDialog;
 
     @Given("^the extension is placed in the extensions folder$")
     public void the_extension_is_placed_in_the_correct_folder() throws Throwable {
-        // Already done by Maven build
+        // Already done by Gradle build
     }
 
     @When("^I open the installed extensions window$")
@@ -25,9 +25,9 @@ public class Steps {
 
     @Then("^I should see the extension listed$")
     public void I_should_see_the_extension_listed() throws Throwable {
-//        JTableOperator tbl = new JTableOperator(extensionsDialog);
-//        tbl.waitCell("loaded", 0, 1);
-//        tbl.waitCell("ASEPSiS-BlueJ", 0, 2);
-//        tbl.waitCell("System", 0, 3);
+        JTableOperator tbl = new JTableOperator(extensionsDialog);
+        tbl.waitCell("loaded", 0, 1);
+        tbl.waitCell("ASEPSiS-BlueJ", 0, 2);
+        tbl.waitCell("System", 0, 3);
     }
 }

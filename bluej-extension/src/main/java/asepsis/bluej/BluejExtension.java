@@ -15,12 +15,12 @@ public class BluejExtension extends Extension {
 
     @Override
     public String getName() {
-        return "";
+        return "ASEPSiS-BlueJ";
     }
 
     @Override
     public String getVersion() {
-        return "";
+        return "1.0.0";
     }
 
 }

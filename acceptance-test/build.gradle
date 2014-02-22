@@ -26,10 +26,7 @@ task fix(dependsOn: ':bluej-extension:jar', type: Copy) {
   into 'minimal-bluej/3.1.0/extensions'
 }
 
-task unfix(type: Delete) {
-	def fileNames = fix.inputs.files.files.collect { it.name }
-	def dir = fix.outputs.files.iterator().next().absolutePath
-	def files = fileNames.collect { "$dir\\$it" }
-	delete files
+task unfix << {
+   def files = file('minimal-bluej/3.1.0/extensions').listFiles()
+   files.each { it.delete() }
 }
-clean.finalizedBy unfix

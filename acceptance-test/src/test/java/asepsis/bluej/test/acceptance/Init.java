@@ -5,6 +5,7 @@ import cucumber.api.java.Before;
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
 import org.fest.swing.security.NoExitSecurityManagerInstaller;
+import org.netbeans.jemmy.JemmyProperties;
 import org.netbeans.jemmy.operators.JFrameOperator;
 
 import java.io.File;
@@ -15,9 +16,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 /**
- * General setup for Cucumber.
+ * General setup for Cucumber and Jemmy.
  */
-public class CucumberInit {
+public class Init {
     private Robot cleaningRobot;
     private Thread t;
     private static JFrameOperator mainFrame;
@@ -28,10 +29,18 @@ public class CucumberInit {
     }
 
     /**
+     * Sets timeout values for different Jemmy actions. Most are lowered considerably compared to default values.
+     */
+    private void configureJemmyTimeouts() {
+        JemmyProperties.setCurrentTimeout("ComponentOperator.WaitStateTimeout", 5000);
+    }
+
+    /**
      * Starts BlueJ in a new thread.
      */
     @Before
     public void before() throws InterruptedException, InvocationTargetException {
+        configureJemmyTimeouts();
         cleaningRobot = BasicRobot.robotWithNewAwtHierarchy();
         sec = NoExitSecurityManagerInstaller.installNoExitSecurityManager();
 

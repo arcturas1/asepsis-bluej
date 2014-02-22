@@ -4,10 +4,12 @@ archivesBaseName = 'asepsis-bluej'
 
 repositories {
     flatDir(dir: "${projectDir}/local-repo")
+    mavenCentral()
 }
 
 dependencies {
     compile name: 'bluejext', version: '3.1.0'
+    testCompile 'junit:junit:4.11'
 }
 
 jar {
