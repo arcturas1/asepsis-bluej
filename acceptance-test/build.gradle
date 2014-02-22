@@ -32,9 +32,9 @@ cucumber.finalizedBy 'unfix'
 /*********************************/
 /*****         TASKS         *****/
 /*********************************/
-project.beforeEvaluate {
+gradle.beforeProject {
     // If a specific BlueJ version isn't specified, use the default one (from gradle.properties)
-    if (!hasProperty('bluejVer'))
+    if (!project.hasProperty('bluejVer'))
         project.setProperty('bluejVer', defaultBluejVer)
 
     if (bluejVer == 'latest')
