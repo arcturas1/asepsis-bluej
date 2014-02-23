@@ -66,6 +66,10 @@ void configureBluejVer(dir) {
         entry key: 'blackbox.uuid', value: 'optout'            // Don't show dialog about blackbox participation when starting
     }
     removePropertyFileComment(bluejDefs)
+
+    // Delete any bundled extensions (they just interfere..)
+    def files = file("$dir/extensions").listFiles()
+    files.each { it.delete() }
 }
 
 task fix(dependsOn: ':bluej-extension:jar', type: Copy) {
