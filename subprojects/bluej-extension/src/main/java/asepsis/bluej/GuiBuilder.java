@@ -45,7 +45,7 @@ public class GuiBuilder implements ApplicationListener {
     }
 
     private Component statusLabel() {
-        JLabel lbl = new JLabel("Not setup");
+        JLabel lbl = new JLabel(bluej.getLabel("asepsis.sidebar.status.notSetup"));
         lbl.setName("asepsis.sidebar.status");
         return lbl;
     }
