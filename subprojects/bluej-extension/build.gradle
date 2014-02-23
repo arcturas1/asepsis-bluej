@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'fatjar'
+version = '0.1-SNAPSHOT'
+archivesBaseName = 'asepsis-bluej'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2'
+    }
+}
+
+dependencies {
+    compile project(':common')
+    compile ':bluejext:3.1.0', { ext { fatJarExclude = true }}
+    compile ':jemmy:2.3.1.1'
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.mockito:mockito-all:1.9.5'
+    testCompile 'org.powermock:powermock-module-junit4:1.5.4'
+    testCompile 'org.powermock:powermock-api-mockito:1.5.4'
+    testRuntime ':bluejcore:3.1.0' // Needed for mocking the (final) BlueJ proxy class with PowerMock
+}
+
+fatJar {
+    manifest {
+	    attributes 'Main-Class': 'asepsis.bluej.BluejExtension'
+	}
+}
+
+// Replace default jar task with the fatJar one
+jar.enabled = false
+jar.finalizedBy fatJar

@@ -1,0 +1,6 @@
+subprojects {
+    repositories {
+        flatDir(dir: "${rootProject.projectDir}/local-repo")
+        mavenCentral()
+    }
+}

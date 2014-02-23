@@ -1,0 +1,136 @@
+apply from: project.file('cucumber.gradle')
+apply plugin: 'download-task'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'de.undercouch:gradle-download-task:0.5'
+    }
+}
+
+dependencies {
+    testCompile project(':common')
+    testCompile ':jemmy:2.3.1.1'
+    testCompile 'org.easytesting:fest-swing:1.2.1'
+    testCompile 'junit:junit:4.11'
+    testCompile 'com.google.guava:guava:16.0.1'
+}
+
+cucumber {
+    formats = ['pretty', "html:$buildDir/reports/cucumber"]
+    gluePackages = ['asepsis.bluej.test.acceptance']
+    environmentVars = ['bluej-jar':file("minimal-bluej/${getActiveBluejVer()}/bluej.jar").absolutePath]
+    if (project.hasProperty('slowSwing'))
+        environmentVars << ['slowSwing':true]
+    println environmentVars
+    if (project.hasProperty('tag'))
+        tags = [tag]
+}
+cucumber.dependsOn 'fix', 'activateCurBluejVer'
+cucumber.finalizedBy 'unfix'
+
+/*********************************/
+/*****         TASKS         *****/
+/*********************************/
+String getActiveBluejVer() {
+    if (extensions.hasProperty('activeBluejVer'))
+        return ext.activeBluejVer
+
+    if (bluejVer == 'latest')
+        ext.activeBluejVer = getLatestBluejVersion()
+    else
+        ext.activeBluejVer = bluejVer
+}
+
+String getLatestBluejVersion() {
+    return 'http://www.bluej.org/version.info'.toURL().readLines()[0].trim() // Ex: 3.1.1
+}
+
+void ignoreBluejVerInGit(ver) {
+    def content = file('.gitignore').text
+    content = content.replaceAll(/!minimal-bluej.*/, "!minimal-bluej/$ver")
+    file('.gitignore').write(content)
+}
+
+void removePropertyFileComment(String fileName) {
+    def content = file(fileName).text
+    content = content.replaceFirst(/.*((\r\n)|(\n))/, '')
+    file(fileName).write(content)
+}
+
+void configureBluejVer(dir) {
+    def bluejDefs = "$dir/bluej.defs"
+    ant.propertyfile(file: bluejDefs) {
+        entry key: 'bluej.autoOpenLastProject', value: 'false' // Don't auto-open projects
+        entry key: 'bluej.debug', value: 'true'                // Don't redirect output to file. It messes with Cucumber output
+        entry key: 'blackbox.uuid', value: 'optout'            // Don't show dialog about blackbox participation when starting
+    }
+    removePropertyFileComment(bluejDefs)
+
+    // Delete any bundled extensions (they just interfere..)
+    def files = file("$dir/extensions").listFiles()
+    files.each { it.delete() }
+}
+
+task fix(dependsOn: ':bluej-extension:jar', type: Copy) {
+    from tasks.getByPath(':bluej-extension:jar')
+    into "minimal-bluej/${getActiveBluejVer()}/extensions"
+}
+fix.dependsOn 'activateCurBluejVer'
+
+task unfix << {
+    def files = file("minimal-bluej/${getActiveBluejVer()}/extensions").listFiles()
+    files.each { it.delete() }
+}
+
+task setDefaultBluejVer(description: 'Sets the default tested BlueJ version to the specified (-Pver=<version>) version', group: 'verification') {
+    doLast {
+        ant.propertyfile(file: 'gradle.properties') {
+            entry key: 'bluejVer', value: ver
+        }
+        removePropertyFileComment('gradle.properties')
+        ignoreBluejVerInGit(ver)
+    }
+}
+
+task activateCurBluejVer {
+    outputs.upToDateWhen { file("minimal-bluej/${getActiveBluejVer()}").exists() }
+
+    doLast {
+        logger.quiet("Activating BlueJ version: ${getActiveBluejVer()}")
+
+        def bluejVerNoDots = getActiveBluejVer().replace('.', '') // Ex: 311
+        def filename = "bluej-${bluejVerNoDots}.jar"
+        def bluejUrl = "http://bluej.org/download/files/$filename"
+
+        download {
+            src bluejUrl
+            dest temporaryDir
+        }
+
+        def bluejJar = "$temporaryDir/$filename"
+        copy {
+            from zipTree(bluejJar)
+            into temporaryDir
+            include 'bluej-dist.jar'
+        }
+
+        def bluejDistJar = "$temporaryDir/bluej-dist.jar"
+        def bluejDir = "minimal-bluej/${getActiveBluejVer()}"
+        file(bluejDir).deleteDir()
+        copy {
+            from zipTree(bluejDistJar)
+            into bluejDir
+            include 'lib/'
+            eachFile { FileCopyDetails fcp ->
+                // Remap to root
+                def segments = fcp.relativePath.segments
+                def pathsegments =segments[1..-1] as String[]
+                fcp.relativePath = new RelativePath(!fcp.file.isDirectory(), pathsegments)
+            }
+        }
+        configureBluejVer bluejDir
+    }
+}

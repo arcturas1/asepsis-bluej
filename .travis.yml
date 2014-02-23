@@ -3,10 +3,7 @@ language: java
 env:
  - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=latest
  - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=3.1.0
- - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=3.0.9
- - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=3.0.8
- - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=3.0.7
- - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=3.0.6 # Release: 11/11/2011
+ - DISPLAY=:99.0 ORG_GRADLE_PROJECT_bluejVer=3.0.9 # Release: 22. feb. 2013 - don't test older versions than this
 
 
 before_install:
