@@ -10,9 +10,11 @@ import org.netbeans.jemmy.operators.JLabelOperator;
 import javax.swing.*;
 import java.awt.*;
 
+import static org.netbeans.jemmy.operators.JLabelOperator.findJLabel;
+
 public class GuiBuilder implements ApplicationListener {
     private BlueJ bluej;
-    private FrameOperator bluejOperator;
+    private Frame bluejFrame;
 
     public GuiBuilder(BlueJ bluej) {
         this.bluej = bluej;
@@ -24,9 +26,9 @@ public class GuiBuilder implements ApplicationListener {
     }
 
     public void buildAndIntegrateGui() {
-        bluejOperator = new FrameOperator(bluej.getCurrentFrame());
+        bluejFrame = bluej.getCurrentFrame();
         addSidebarToBluej();
-        bluejOperator.pack();
+        bluejFrame.pack();
     }
 
     private void addSidebarToBluej() {
@@ -51,7 +53,7 @@ public class GuiBuilder implements ApplicationListener {
     }
 
     private Container getBluejToolPanel() {
-        JLabelOperator op = new JLabelOperator(bluejOperator, new ClassComponentChooser("bluej.pkgmgr.MachineIcon"));
-        return op.getParent();
+        Container lbl = findJLabel(bluejFrame, new ClassComponentChooser("bluej.pkgmgr.MachineIcon"));
+        return lbl.getParent();
     }
 }

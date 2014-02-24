@@ -72,7 +72,6 @@ class CucumberPlugin  implements Plugin<Project> {
         // CucumberTask cucumberTask = project.tasks.create(name: 'cucumber', dependsOn: ['assemble', 'compileTestJava'], type: CucumberTask)
         cucumberTask.description = "Run cucumber acceptance tests."
         cucumberTask.group = "Verification"
-        project.tasks.getByName('check').finalizedBy(cucumberTask)
     }
 }
 

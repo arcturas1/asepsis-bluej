@@ -32,3 +32,38 @@ fatJar {
 // Replace default jar task with the fatJar one
 jar.enabled = false
 jar.finalizedBy fatJar
+
+task runWithBlueJ(type: JavaExec) {
+    description = 'Runs the specified (-PbluejVer=<ver> or latest) version of BlueJ with the extension installed and removes it afterwards.'
+    group = 'run'
+
+    doLast {
+        main = 'bluej.Boot'
+        classpath = files("$selectedBluejDir/lib/bluej.jar")
+    }
+}
+runWithBlueJ.dependsOn 'installIntoBluej'
+runWithBlueJ.finalizedBy 'uninstallFromBluej'
+
+task installIntoBluej(type: Copy) {
+    description = 'Builds and installs the extension into the specified (-PbluejVer=<ver> or latest) version of BlueJ'
+    group = 'run'
+
+    from jar
+    into "$selectedBluejDir/lib/extensions"
+
+    doFirst {
+        logger.quiet("Installing extension into BlueJ $selectedBluejVer")
+    }
+}
+installIntoBluej.dependsOn jar, ':getBlueJ'
+
+task uninstallFromBluej {
+    description = 'Removes the extension, if present, from the specified (-PbluejVer=<ver> or latest) version of BlueJ'
+    group = 'run'
+
+    doLast {
+        logger.quiet "Removing extension from BlueJ $selectedBluejVer"
+        file("$selectedBluejDir/lib/extensions/${jar.archiveName}").delete()
+    }
+}

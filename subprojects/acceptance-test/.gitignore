@@ -1,3 +1,0 @@
-# Ignore all versions in minimal-bluej except the default one (set by gradle task setDefaultBluejVer)
-minimal-bluej/*
-!minimal-bluej/3.1.1

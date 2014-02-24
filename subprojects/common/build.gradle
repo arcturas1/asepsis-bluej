@@ -1,3 +1,5 @@
+import asepsis.BluejDownloader
+
 apply plugin: 'java'
 
 dependencies {
