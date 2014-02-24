@@ -12,6 +12,11 @@ buildscript {
     }
 }
 
+configurations {
+    runWithBlueJ
+    swag
+}
+
 dependencies {
     compile project(':common')
     compile ':bluejext:3.1.0', { ext { fatJarExclude = true }}
@@ -21,6 +26,9 @@ dependencies {
     testCompile 'org.powermock:powermock-module-junit4:1.5.4'
     testCompile 'org.powermock:powermock-api-mockito:1.5.4'
     testRuntime ':bluejcore:3.1.0' // Needed for mocking the (final) BlueJ proxy class with PowerMock
+    runWithBlueJ ':swexpl:1.6'
+    runWithBlueJ files("$selectedBluejDir/lib/bluej.jar")
+    swag ':swag:1.6' // Not a real dependency, only used to resolve its path for use in task runWithBlueJ
 }
 
 fatJar {
@@ -34,12 +42,21 @@ jar.enabled = false
 jar.finalizedBy fatJar
 
 task runWithBlueJ(type: JavaExec) {
-    description = 'Runs the specified (-PbluejVer=<ver> or latest) version of BlueJ with the extension installed and removes it afterwards.'
+    description = 'Runs the specified (-PbluejVer=<ver> or latest) version of BlueJ with the extension installed and removes it afterwards. Use -Pswxpl to run with Swing Explorer.'
     group = 'run'
 
-    doLast {
-        main = 'bluej.Boot'
-        classpath = files("$selectedBluejDir/lib/bluej.jar")
+    main = 'bluej.Boot'
+    classpath = configurations.runWithBlueJ
+
+    if (project.hasProperty('swxpl')) {
+        // According to: http://www.swingexplorer.com/?page=documentation
+        main = 'org.swingexplorer.Launcher'
+        args = ['bluej.Boot']
+        def swagJar = configurations.swag.asPath
+        jvmArgs = [
+                "-javaagent:$swagJar",
+                "-Xbootclasspath/a:$swagJar"
+        ]
     }
 }
 runWithBlueJ.dependsOn 'installIntoBluej'

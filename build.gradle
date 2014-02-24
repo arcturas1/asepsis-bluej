@@ -19,6 +19,7 @@ buildscript {
     }
 }
 
+apply plugin: 'base' // To get 'clean' task that deletes 'build' dir
 apply plugin: 'download-task'
 apply from: 'scripts/getBluejTask.gradle'
 

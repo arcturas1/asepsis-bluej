@@ -39,6 +39,7 @@ public class GuiBuilder implements ApplicationListener {
 
     private Component sidebar() {
         JPanel sidebar = new JPanel();
+        sidebar.setOpaque(false);
         sidebar.setBorder( BorderFactory.createTitledBorder("ASEPSiS") );
 
         sidebar.add(statusLabel());
