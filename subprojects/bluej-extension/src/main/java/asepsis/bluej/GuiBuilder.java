@@ -4,13 +4,11 @@ import asepsis.bluej.common.ClassComponentChooser;
 import bluej.extensions.BlueJ;
 import bluej.extensions.event.ApplicationEvent;
 import bluej.extensions.event.ApplicationListener;
-import org.netbeans.jemmy.operators.FrameOperator;
-import org.netbeans.jemmy.operators.JLabelOperator;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static org.netbeans.jemmy.operators.JLabelOperator.findJLabel;
+import static org.netbeans.jemmy.operators.ComponentOperator.findComponent;
 
 public class GuiBuilder implements ApplicationListener {
     private BlueJ bluej;
@@ -54,7 +52,7 @@ public class GuiBuilder implements ApplicationListener {
     }
 
     private Container getBluejToolPanel() {
-        Container lbl = findJLabel(bluejFrame, new ClassComponentChooser("bluej.pkgmgr.MachineIcon"));
-        return lbl.getParent();
+        Component c = findComponent(bluejFrame, new ClassComponentChooser("bluej.pkgmgr.MachineIcon"));
+        return c.getParent();
     }
 }
