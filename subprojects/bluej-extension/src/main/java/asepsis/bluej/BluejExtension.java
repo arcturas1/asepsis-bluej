@@ -1,7 +1,12 @@
 package asepsis.bluej;
 
+
+import asepsis.bluej.gui.ExtensionController;
 import bluej.extensions.BlueJ;
 import bluej.extensions.Extension;
+import bluej.extensions.event.ApplicationEvent;
+import bluej.extensions.event.ApplicationListener;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -16,7 +21,7 @@ public class BluejExtension extends Extension {
     @Override
     public void startup(BlueJ blueJ) {
         bluej = blueJ;
-        bluej.addApplicationListener(new GuiBuilder(bluej));
+        new ExtensionController(bluej);
     }
 
     @Override

@@ -58,6 +58,7 @@ public class Init {
         // Most of these are lowered considerably compared to default values.
         // ~60 seconds is just too long to wait before test fail.
         JemmyProperties.setCurrentTimeout("ComponentOperator.WaitStateTimeout", 5000);
+        JemmyProperties.setCurrentTimeout("ComponentOperator.WaitComponentTimeout", 5000);
     }
 
     /**

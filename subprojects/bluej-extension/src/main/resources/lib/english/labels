@@ -1,2 +1,16 @@
 asepsis.extension.description=Extends BlueJ with functionality provided by the ASEPSiS system.
+
+# Share
+asepsis.general.ok=OK
+asepsis.general.cancel=Cancel
+
+# Sidebar
+asepsis.sidebar.status.setup=Setup
 asepsis.sidebar.status.notSetup=Not setup
+asepsis.sidebar.setupBtn=Setup
+
+# Setup dialog
+asepsis.setup.dialog.title=Setup handin
+asepsis.setup.dialog.info=Associate this BlueJ project with the following remote assignment:
+asepsis.setup.dialog.courseLabel=Course:
+asepsis.setup.dialog.assignmentLabel=Assignment:

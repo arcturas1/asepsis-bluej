@@ -1,6 +1,9 @@
 package asepsis.bluej.common;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.List;
+import java.util.Objects;
 
 public class Util {
     /**
@@ -15,5 +18,9 @@ public class Util {
             file.delete();
         }
         dir.delete();
+    }
+
+    public static String[] toStrArray(List<String> lst) {
+        return lst.toArray(new String[lst.size()]);
     }
 }
