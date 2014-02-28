@@ -94,12 +94,12 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
     }
 
     private void initCourseComboBox() {
-        courseComboBox = new JComboBox<String>();
+        courseComboBox = new JComboBox();
         courseComboBox.setName("asepsis.setup.dialog.courseList");
     }
 
     private void initAssignmentComboBox() {
-        assignmentComboBox = new JComboBox<String>();
+        assignmentComboBox = new JComboBox();
         assignmentComboBox.setName("asepsis.setup.dialog.assignmentList");
     }
 
