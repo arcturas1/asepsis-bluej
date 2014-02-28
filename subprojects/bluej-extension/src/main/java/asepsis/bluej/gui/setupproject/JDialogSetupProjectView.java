@@ -18,9 +18,9 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
     private Labeller labeller;
     private JLabel infoLabel;
     private JLabel courseLabel;
-    private JComboBox<String> courseComboBox;
+    private JComboBox courseComboBox;
     private JLabel assignmentLabel;
-    private JComboBox<String> assignmentComboBox;
+    private JComboBox assignmentComboBox;
     private JButton okButton, cancelButton;
 
     public JDialogSetupProjectView(Frame owner, Labeller labeller) {
@@ -38,14 +38,14 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
 
     @Override
     public void onNewCourses(String[] newCourses) {
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(newCourses);
+        DefaultComboBoxModel model = new DefaultComboBoxModel(newCourses);
         courseComboBox.setModel(model);
         courseComboBox.setSelectedIndex(0);
     }
 
     @Override
     public void onNewAssignments(String[] newAssignments) {
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(newAssignments);
+        DefaultComboBoxModel model = new DefaultComboBoxModel(newAssignments);
         assignmentComboBox.setModel(model);
     }
 
