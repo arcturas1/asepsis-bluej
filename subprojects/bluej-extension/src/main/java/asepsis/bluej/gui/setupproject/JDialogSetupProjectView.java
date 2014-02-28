@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.net.URL;
 
 import static asepsis.bluej.gui.event.EventUtil.asActionListener;
 
@@ -20,7 +19,6 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
     private JLabel infoLabel;
     private JLabel courseLabel;
     private JComboBox<String> courseComboBox;
-    private JButton refreshButton;
     private JLabel assignmentLabel;
     private JComboBox<String> assignmentComboBox;
     private JButton okButton, cancelButton;
@@ -89,7 +87,6 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
         infoLabel = makeLabel("asepsis.setup.dialog.info");
         courseLabel = makeLabel("asepsis.setup.dialog.courseLabel");
         initCourseComboBox();
-        initRefreshButton();
         assignmentLabel = makeLabel("asepsis.setup.dialog.assignmentLabel");
         initAssignmentComboBox();
         initOkButton();
@@ -99,13 +96,6 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
     private void initCourseComboBox() {
         courseComboBox = new JComboBox<String>();
         courseComboBox.setName("asepsis.setup.dialog.courseList");
-    }
-
-    private void initRefreshButton() {
-        URL imagePath = getClass().getResource("/images/reload_icon.png");
-        refreshButton = new JButton(new ImageIcon(imagePath));
-        refreshButton.setPreferredSize(new Dimension(20,20));
-        refreshButton.setFocusPainted(false);
     }
 
     private void initAssignmentComboBox() {
@@ -134,21 +124,6 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
     }
 
     private JComponent buildContent() {
-//        FormLayout layout = new FormLayout(
-//                "pref,pref,pref",
-//                "40dlu, 40dlu, 40dlu"
-//        );
-//        DefaultFormBuilder builder = new DefaultFormBuilder(layout, new FormDebugPanel());
-//        builder.border(Borders.DIALOG);
-//
-//        builder.setRowSpan(2);
-//        builder.append(new JButton("1,1"));
-//        builder.setRowSpan(1);
-//        builder.append(new JButton("1,2"));
-//        builder.nextLine();
-//        builder.append(new JButton("2,1"));
-//        builder.append(new JButton("2,2"));
-
         FormLayout layout = new FormLayout(
                 "right:max(60dlu;pref), 4dlu, max(60dlu;pref)", // 3 columns
                 "" );
