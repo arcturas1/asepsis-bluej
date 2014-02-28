@@ -15,4 +15,4 @@ jdk:
  - openjdk7
  - openjdk6
 
-script: ./gradlew check -q
+script: ./gradlew check

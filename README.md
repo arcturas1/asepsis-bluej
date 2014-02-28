@@ -7,6 +7,7 @@ Therefore, every piece has been built with **modern processes** and **state-of-t
 
 * Behavior-driven development
 * Automated acceptance tests
+* Continuous Integration
 * Automated build management, and
 * Clean code principles
 
