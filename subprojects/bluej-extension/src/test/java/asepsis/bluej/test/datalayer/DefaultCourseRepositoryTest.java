@@ -32,7 +32,7 @@ public class DefaultCourseRepositoryTest {
     }
 
     @Test
-    public void find_ReturnsCourseFromDALW_WhenItExists() {
+    public void find_ReturnsCourseFromDAL_WhenItExists() {
         assertThat(repo.find("SomeCourse2"), is(dummyCourse2()));
     }
 

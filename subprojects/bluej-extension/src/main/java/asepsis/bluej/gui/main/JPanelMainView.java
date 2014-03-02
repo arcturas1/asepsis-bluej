@@ -30,6 +30,13 @@ public class JPanelMainView extends JPanel implements MainView {
         statusLabel.setText(txt);
     }
 
+    @Override
+    public void setEnable(boolean enabled) {
+        setEnabled(enabled);
+        statusLabel.setEnabled(enabled);
+        setupButton.setEnabled(enabled);
+    }
+
     private void initComponents() {
         initSelf();
         initStatusLabel();
@@ -42,12 +49,14 @@ public class JPanelMainView extends JPanel implements MainView {
         setAlignmentX(Component.CENTER_ALIGNMENT);
         setOpaque(false);
         setBorder(BorderFactory.createTitledBorder("ASEPSiS"));
+        setEnabled(false);
     }
 
     private void initStatusLabel() {
         statusLabel = new JLabel(labeller.getLabel("asepsis.sidebar.status.notSetup"));
         statusLabel.setName("asepsis.sidebar.status");
         statusLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        statusLabel.setEnabled(false);
     }
 
     private void initSetupButton() {
@@ -55,6 +64,7 @@ public class JPanelMainView extends JPanel implements MainView {
         setupButton.setName("asepsis.sidebar.setupBtn");
         setupButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         setupButton.setFocusable(false); // Mimic normal BlueJ buttons
+        setupButton.setEnabled(false);
     }
 
     private void buildContent() {

@@ -3,13 +3,13 @@ package asepsis.bluej.test.gui.setupproject;
 import asepsis.bluej.domain.Assignment;
 import asepsis.bluej.domain.Course;
 import asepsis.bluej.gui.event.EventListener;
-import asepsis.bluej.gui.eventbus.SetupProjectCanceled;
-import asepsis.bluej.gui.eventbus.SetupProjectCompleted;
-import asepsis.bluej.gui.eventbus.SetupProjectRequest;
+import asepsis.bluej.gui.eventbus.SetupProjectCanceledEvent;
+import asepsis.bluej.gui.eventbus.SetupProjectCompletedEvent;
+import asepsis.bluej.gui.eventbus.SetupProjectRequestEvent;
 import asepsis.bluej.gui.setupproject.DefaultSetupProjectModel;
 import asepsis.bluej.repository.CourseRepository;
+import asepsis.bluej.test.util.EventBusCaptor;
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,24 +28,6 @@ public class DefaultSetupProjectModelTest {
     private EventBus eventBus;
     private CourseRepository repo;
 
-    private List<Course> dummyCourses() {
-        List<Assignment> c2ass = new ArrayList<Assignment>();
-        c2ass.add(new Assignment("C2A1"));
-        c2ass.add(new Assignment("C2A2"));
-
-        List<Course> courses = new ArrayList<Course>();
-        courses.add(dummyC1Course());
-        courses.add(new Course("C2", c2ass));
-
-        return courses;
-    }
-
-    private Course dummyC1Course() {
-        List<Assignment> c1ass = new ArrayList<Assignment>();
-        c1ass.add(new Assignment("C1A1"));
-        c1ass.add(new Assignment("C1A2"));
-        return new Course("C1", c1ass);
-    }
     @Before
     public void setUp() throws Exception {
         eventBus = new EventBus();
@@ -89,24 +71,25 @@ public class DefaultSetupProjectModelTest {
 
     @Test
     public void cancelDialog_SendsSetupProjectCanceledOnEventBus() {
-        ProjectCanceledListener listener = new ProjectCanceledListener();
-        eventBus.register(listener);
+        EventBusCaptor<SetupProjectCanceledEvent> captor = new EventBusCaptor<SetupProjectCanceledEvent>(SetupProjectCanceledEvent.class);
+        eventBus.register(captor);
 
         model.cancelDialog();
 
-        assertThat(listener.eventReceived, is(true));
+        captor.assertCapture();
     }
 
     @Test
     public void acceptDialog_SendsSetupProjectFinishedOnEventBus() {
-        ProjectFinishedListener listener = new ProjectFinishedListener();
-        eventBus.register(listener);
+        EventBusCaptor<SetupProjectCompletedEvent> captor = new EventBusCaptor<SetupProjectCompletedEvent>(SetupProjectCompletedEvent.class);
+        eventBus.register(captor);
 
         model.acceptDialog("SomeCourse", "SomeAssignment");
 
-        assertThat(listener.event, is(notNullValue()));
-        assertThat(listener.event.getCourseName(), is("SomeCourse"));
-        assertThat(listener.event.getAssignmentName(), is("SomeAssignment"));
+        captor.assertCapture();
+        assertThat(captor.event, is(notNullValue()));
+        assertThat(captor.event.getCourseName(), is("SomeCourse"));
+        assertThat(captor.event.getAssignmentName(), is("SomeAssignment"));
     }
 
     @Test
@@ -116,26 +99,27 @@ public class DefaultSetupProjectModelTest {
 
         EventBus e = new EventBus();
         e.register(model);
-        e.post(new SetupProjectRequest());
+        e.post(new SetupProjectRequestEvent());
 
         verify(listener).onEvent();
     }
 
-    private class ProjectCanceledListener {
-        public boolean eventReceived;
+    private List<Course> dummyCourses() {
+        List<Assignment> c2ass = new ArrayList<Assignment>();
+        c2ass.add(new Assignment("C2A1"));
+        c2ass.add(new Assignment("C2A2"));
 
-        @Subscribe
-        public void m(SetupProjectCanceled ignored) {
-            eventReceived = true;
-        }
+        List<Course> courses = new ArrayList<Course>();
+        courses.add(dummyC1Course());
+        courses.add(new Course("C2", c2ass));
+
+        return courses;
     }
 
-    private class ProjectFinishedListener {
-        public SetupProjectCompleted event;
-
-        @Subscribe
-        public void m(SetupProjectCompleted e) {
-            event = e;
-        }
+    private Course dummyC1Course() {
+        List<Assignment> c1ass = new ArrayList<Assignment>();
+        c1ass.add(new Assignment("C1A1"));
+        c1ass.add(new Assignment("C1A2"));
+        return new Course("C1", c1ass);
     }
 }

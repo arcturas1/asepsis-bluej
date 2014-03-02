@@ -45,4 +45,28 @@ public class MainPresenterTest {
         listener.onEvent();
         verify(view).onSetupChange(true);
     }
+
+    @Test
+    public void enablesView_WhenModelRequestsGuiEnable() {
+        // Capture presenters model listener
+        ArgumentCaptor<EventListener> captor = ArgumentCaptor.forClass(EventListener.class);
+        verify(model).whenEnableGuiRequested(captor.capture());
+        EventListener listener = captor.getValue();
+
+        listener.onEvent();
+
+        verify(view).setEnable(true);
+    }
+
+    @Test
+    public void disablesView_WhenModelRequestsGuiDisable() {
+        // Capture presenters model listener
+        ArgumentCaptor<EventListener> captor = ArgumentCaptor.forClass(EventListener.class);
+        verify(model).whenDisableGuiRequested(captor.capture());
+        EventListener listener = captor.getValue();
+
+        listener.onEvent();
+
+        verify(view).setEnable(false);
+    }
 }

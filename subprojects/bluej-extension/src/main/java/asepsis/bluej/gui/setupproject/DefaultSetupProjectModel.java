@@ -4,9 +4,9 @@ import asepsis.bluej.domain.Assignment;
 import asepsis.bluej.domain.Course;
 import asepsis.bluej.gui.event.EventDispatcher;
 import asepsis.bluej.gui.event.EventListener;
-import asepsis.bluej.gui.eventbus.SetupProjectCanceled;
-import asepsis.bluej.gui.eventbus.SetupProjectCompleted;
-import asepsis.bluej.gui.eventbus.SetupProjectRequest;
+import asepsis.bluej.gui.eventbus.SetupProjectCanceledEvent;
+import asepsis.bluej.gui.eventbus.SetupProjectCompletedEvent;
+import asepsis.bluej.gui.eventbus.SetupProjectRequestEvent;
 import asepsis.bluej.repository.CourseRepository;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -46,13 +46,13 @@ public class DefaultSetupProjectModel implements SetupProjectModel {
     @Override
     public void acceptDialog(String course, String assignment) {
         closeDialogRequest.tellListeners();
-        eventBus.post(new SetupProjectCompleted(course, assignment));
+        eventBus.post(new SetupProjectCompletedEvent(course, assignment));
     }
 
     @Override
     public void cancelDialog() {
         closeDialogRequest.tellListeners();
-        eventBus.post(new SetupProjectCanceled());
+        eventBus.post(new SetupProjectCanceledEvent());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class DefaultSetupProjectModel implements SetupProjectModel {
     }
 
     @Subscribe
-    public void onSetupProjectRequest(SetupProjectRequest ignored) {
+    public void onSetupProjectRequest(SetupProjectRequestEvent ignored) {
         showDialogRequest.tellListeners();
     }
 }

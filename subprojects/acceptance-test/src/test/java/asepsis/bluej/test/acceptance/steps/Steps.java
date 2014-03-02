@@ -7,7 +7,6 @@ import cucumber.api.java.en.When;
 import org.netbeans.jemmy.operators.*;
 import org.netbeans.jemmy.util.NameComponentChooser;
 
-import java.awt.*;
 import java.io.File;
 
 import static asepsis.bluej.test.acceptance.Init.bluejFrame;
@@ -72,8 +71,8 @@ public class Steps {
         Init.setBluejFrame("Bluej:  testProject");
     }
 
-    @Then("^the ASEPSiS sidebar should say \"([^\"]*)\"$")
-    public void the_ASEPSiS_sidebar_should_say(String expectedStr) throws Throwable {
+    @Then("^ASEPSiS should say \"([^\"]*)\"$")
+    public void ASEPSiS_should_say(String expectedStr) throws Throwable {
         JLabelOperator lbl = new JLabelOperator(bluejFrame(), new NameComponentChooser("asepsis.sidebar.status"));
 
         assertThat(lbl.getText(), is(expectedStr));

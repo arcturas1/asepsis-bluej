@@ -6,4 +6,6 @@ public interface MainView {
     void whenProjectSetupRequested(EventListener e);
 
     void onSetupChange(boolean isSetup);
+
+    void setEnable(boolean enabled);
 }

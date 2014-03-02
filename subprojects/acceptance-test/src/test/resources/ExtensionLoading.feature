@@ -1,4 +1,4 @@
-Feature: Extension is loaded
+Feature: Extension loading
   In order to provide the extensions functionality to users
   As a developer
   I want to ensure the extension is loaded in BlueJ

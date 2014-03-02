@@ -6,15 +6,19 @@ Feature: Setup hand-in
   Background:
     Given I create a new project
 
-  Scenario: Initial state
-    Then the ASEPSiS sidebar should say "Not setup"
+  Scenario: Initial setup status
+    Then ASEPSiS should say "Not setup"
 
   Scenario: Accept setup
     When I ask ASEPSiS to setup the project with a course and an assignment
     And I accept the setup
-    Then the ASEPSiS sidebar should say "Setup"
+    Then ASEPSiS should say "Setup"
 
   Scenario: Cancel setup
     When I ask ASEPSiS to setup the project with a course and an assignment
     But I cancel the setup
-    Then the ASEPSiS sidebar should say "Not setup"
+    Then ASEPSiS should say "Not setup"
+
+  Scenario: No project
+    When I close the project
+    Then I should not be able to setup the project
