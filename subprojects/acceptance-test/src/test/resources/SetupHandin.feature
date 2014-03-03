@@ -22,3 +22,9 @@ Feature: Setup hand-in
   Scenario: Cannot setup with no project
     When I close the project
     Then I should not be able to setup the project
+
+  Scenario: Setup status is local to project
+    When I ask ASEPSiS to setup the project with a course and an assignment
+    And I accept the setup
+    And I create another new project
+    Then ASEPSiS should say "Not setup"

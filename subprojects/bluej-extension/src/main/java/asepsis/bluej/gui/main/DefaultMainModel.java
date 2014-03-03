@@ -58,6 +58,7 @@ public class DefaultMainModel implements MainModel {
     @Subscribe
     public void onProjectClosed(ProjectClosedEvent ignored) {
         disableGuiRequest.tellListeners();
+        setSetup(false);
     }
 
     private void setSetup(boolean newValue) {

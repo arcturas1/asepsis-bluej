@@ -10,7 +10,8 @@ import org.netbeans.jemmy.util.NameComponentChooser;
 import java.io.File;
 
 import static asepsis.bluej.test.acceptance.Init.bluejFrame;
-import static asepsis.bluej.test.acceptance.Init.getTempDir;
+import static asepsis.bluej.test.acceptance.Init.getTempDir1;
+import static asepsis.bluej.test.acceptance.Init.getTempDir2;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -65,10 +66,20 @@ public class Steps {
     public void I_create_a_new_project() throws Throwable {
         new JMenuBarOperator(bluejFrame()).pushMenuNoBlock("Project|New Project...");
         JFileChooserOperator chooser = new JFileChooserOperator( new JDialogOperator(bluejFrame(), "New Project") );
-        chooser.chooseFile( new File(getTempDir(), "testProject").getAbsolutePath() );
+        chooser.chooseFile( new File(getTempDir1(), "testProject1").getAbsolutePath() );
 
         // BlueJ starts a new instance of itself at this point, we need to set the new instance as the main frame
-        Init.setBluejFrame("Bluej:  testProject");
+        Init.setBluejFrame("Bluej:  testProject1");
+    }
+
+    @When("^I create another new project$")
+    public void I_create_another_new_project() throws Throwable {
+        new JMenuBarOperator(bluejFrame()).pushMenuNoBlock("Project|New Project...");
+        JFileChooserOperator chooser = new JFileChooserOperator( new JDialogOperator(bluejFrame(), "New Project") );
+        chooser.chooseFile( new File(getTempDir2(), "testProject2").getAbsolutePath() );
+
+        // BlueJ starts a new instance of itself at this point, we need to set the new instance as the main frame
+        Init.setBluejFrame("Bluej:  testProject2");
     }
 
     @Then("^ASEPSiS should say \"([^\"]*)\"$")

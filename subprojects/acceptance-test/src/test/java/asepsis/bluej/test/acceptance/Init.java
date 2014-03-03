@@ -26,7 +26,8 @@ public class Init {
     private Thread t;
     private static JFrameOperator mainFrame;
     private NoExitSecurityManagerInstaller sec;
-    private static File tempDir;
+    private static File tempDir1;
+    private static File tempDir2;
 
     public static void setBluejFrame(String newWindowTitle) {
         mainFrame = new JFrameOperator(newWindowTitle);
@@ -36,16 +37,21 @@ public class Init {
         return mainFrame;
     }
 
-    public static String getTempDir() {
-        return tempDir.getAbsolutePath();
+    public static String getTempDir1() {
+        return tempDir1.getAbsolutePath();
+    }
+    public static String getTempDir2() {
+        return tempDir2.getAbsolutePath();
     }
 
-    private void createTempDir() {
-        tempDir = Files.createTempDir();
+    private void createTempDirs() {
+        tempDir1 = Files.createTempDir();
+        tempDir2 = Files.createTempDir();
     }
 
-    private void deleteTempDir() {
-        Util.deleteDirectory(tempDir);
+    private void deleteTempDirs() {
+        Util.deleteDirectory(tempDir1);
+        Util.deleteDirectory(tempDir2);
     }
 
     private void configureJemmy() {
@@ -59,6 +65,8 @@ public class Init {
         // ~60 seconds is just too long to wait before test fail.
         JemmyProperties.setCurrentTimeout("ComponentOperator.WaitStateTimeout", 5000);
         JemmyProperties.setCurrentTimeout("ComponentOperator.WaitComponentTimeout", 5000);
+        JemmyProperties.setCurrentTimeout("Waiter.WaitingTime", 5000);
+        JemmyProperties.setCurrentTimeout("WindowWaiter.WaitWindowTimeout", 5000);
     }
 
     /**
@@ -66,7 +74,7 @@ public class Init {
      */
     @Before
     public void before() throws InterruptedException, InvocationTargetException {
-        createTempDir();
+        createTempDirs();
         configureJemmy();
         cleaningRobot = BasicRobot.robotWithNewAwtHierarchy();
         sec = NoExitSecurityManagerInstaller.installNoExitSecurityManager();
@@ -113,6 +121,6 @@ public class Init {
         cleaningRobot.cleanUp();
         sec.uninstall();
         System.gc(); // Allow JVM to cleanup disposed windows
-        deleteTempDir();
+        deleteTempDirs();
     }
 }

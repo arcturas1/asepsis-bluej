@@ -73,4 +73,12 @@ public class DefaultMainModelTest {
 
         verify(listener).onEvent();
     }
+
+    @Test
+    public void resetsProjectSetupStatus_WhenProjectClosedArrivesOnEventBus() {
+        eventBus.post(new SetupProjectCompletedEvent("SomeCourse", "SomeAssignment"));
+        eventBus.post(new ProjectClosedEvent());
+
+        assertThat(model.isSetup(), is(false));
+    }
 }
