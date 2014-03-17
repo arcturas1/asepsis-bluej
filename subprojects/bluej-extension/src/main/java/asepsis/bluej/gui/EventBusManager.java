@@ -56,6 +56,28 @@ public class EventBusManager implements ApplicationListener, PackageListener {
         pkgMap.put(curPkg, eventBus);
 
         eventBus.post(new ProjectOpenedEvent());
+        /*
+        try {
+            Editor obj = curPkg.getClasses()[0].getEditor();
+            Field f = obj.getClass().getDeclaredField("bjEditor");
+            f.setAccessible(true);
+            MoeEditor e = (MoeEditor)f.get(obj);
+            e.setVisible(true);
+            Thread.sleep(500);
+            JComponent c = findJComponent(e, new ClassComponentChooser("bluej.editor.moe.NaviView"));
+            Container panel = c.getParent();
+
+            JPanel newPanel = new JPanel();
+            newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS));
+            newPanel.add(new JButton("This"));
+            newPanel.add(new JButton("Is"));
+            newPanel.add(new JButton("A"));
+            newPanel.add(new JButton("Test"));
+
+            panel.add(newPanel, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
     }
 
     @Override

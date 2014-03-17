@@ -7,7 +7,7 @@ env:
 
 
 before_install:
- - chmod +x gradlew # TODO: permission exceptions on Travis without this, fix later
+ - chmod +x gradlew
  - "sh -e /etc/init.d/xvfb start"
 
 jdk:

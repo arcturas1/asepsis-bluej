@@ -10,6 +10,6 @@ build/
 # Myself
 todo.txt
 
-# Ignore all versions in minimal-bluej except the default one (set by gradle task :setDefaultBluejVer)
+# Ignore all versions in bluej-dist except the default one (set by gradle task :setDefaultBluejVer)
 bluej-dist/*
 !bluej-dist/3.1.1

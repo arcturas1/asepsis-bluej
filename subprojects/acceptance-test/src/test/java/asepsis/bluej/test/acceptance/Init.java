@@ -4,7 +4,7 @@ import asepsis.bluej.common.Util;
 import com.google.common.io.Files;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import org.fest.swing.core.*;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.core.Robot;
 import org.fest.swing.security.NoExitSecurityManagerInstaller;
 import org.netbeans.jemmy.JemmyProperties;
@@ -65,8 +65,6 @@ public class Init {
         // ~60 seconds is just too long to wait before test fail.
         JemmyProperties.setCurrentTimeout("ComponentOperator.WaitStateTimeout", 5000);
         JemmyProperties.setCurrentTimeout("ComponentOperator.WaitComponentTimeout", 5000);
-        JemmyProperties.setCurrentTimeout("Waiter.WaitingTime", 5000);
-        JemmyProperties.setCurrentTimeout("WindowWaiter.WaitWindowTimeout", 5000);
     }
 
     /**
