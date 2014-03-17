@@ -19,7 +19,7 @@ public class SetupHandinSteps {
 
         setupDlg = new JDialogOperator(bluejFrame(), "Setup handin");
         new JComboBoxOperator(setupDlg, new NameComponentChooser("asepsis.setup.dialog.courseList")).selectItem(0);
-        new JComboBoxOperator(setupDlg, new NameComponentChooser("asepsis.setup.dialog.assignmentList")).selectItem(0);
+        new JComboBoxOperator(setupDlg, new NameComponentChooser("asepsis.setup.dialog.assignmentList")).waitItemSelected("Course1-Assignment1");
     }
 
     @When("^I accept the setup$")
