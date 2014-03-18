@@ -3,14 +3,13 @@ package asepsis.bluej.test.acceptance.support;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 
 import javax.swing.*;
-import java.io.*;
 
 import static org.fest.reflect.core.Reflection.staticMethod;
 
-public class NonBluejEdtOfficer extends FailOnThreadViolationRepaintManager {
+public class BluejExtensionEDTOfficer extends FailOnThreadViolationRepaintManager {
     public static FailOnThreadViolationRepaintManager install() {
         Object m = currentRepaintManager();
-        if (m instanceof NonBluejEdtOfficer) return (NonBluejEdtOfficer)m;
+        if (m instanceof BluejExtensionEDTOfficer) return (BluejExtensionEDTOfficer)m;
         return installNew();
     }
 
@@ -40,35 +39,19 @@ public class NonBluejEdtOfficer extends FailOnThreadViolationRepaintManager {
     }
 
     private static FailOnThreadViolationRepaintManager installNew() {
-        NonBluejEdtOfficer m = new NonBluejEdtOfficer();
+        BluejExtensionEDTOfficer m = new BluejExtensionEDTOfficer();
         setCurrentManager(m);
         return m;
     }
 
-
     private boolean isFromBluej(JComponent c) {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        for (int i = 0; i < stackTrace.length; i++) {
-            if (i <= 2)
-                continue;
+        for (int i = 3; i < stackTrace.length; i++) {
             if (stackTrace[i].getClassName().startsWith("bluej"))
                 return true;
             if (stackTrace[i].getClassName().startsWith("asepsis.bluej"))
                 return false;
         }
         return false;
-    }
-
-    private void logToFile() {
-        try {
-            PrintWriter pw = new PrintWriter(new FileOutputStream("out.txt", true));
-            pw.write("===================================\n");
-            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            for (StackTraceElement st : stackTrace)
-                pw.write(st.getClassName() + ":" + st.getMethodName() + "\n");
-            pw.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 }

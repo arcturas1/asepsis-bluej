@@ -1,7 +1,7 @@
 package asepsis.bluej.test.acceptance;
 
 import asepsis.bluej.common.Util;
-import asepsis.bluej.test.acceptance.support.NonBluejEdtOfficer;
+import asepsis.bluej.test.acceptance.support.BluejExtensionEDTOfficer;
 import com.google.common.io.Files;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -77,7 +77,7 @@ public class Init {
         configureJemmy();
         cleaningRobot = BasicRobot.robotWithNewAwtHierarchy();
         sec = NoExitSecurityManagerInstaller.installNoExitSecurityManager();
-        NonBluejEdtOfficer.install();
+        BluejExtensionEDTOfficer.install();
 
         t = new Thread(new Runnable() {
             public void run() {

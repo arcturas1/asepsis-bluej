@@ -28,10 +28,10 @@ task checkForErrorOutput {
 
     doLast {
         def errStr = errOut.getOutput()
-        if (errStr.contains('Caused by:'))
-            throw new GradleException(formatErrMsg('Exception', errStr))
         if (errStr.contains('EDT violation'))
             throw new GradleException(formatErrMsg('EDT violation', errStr))
+        if (errStr.contains('Caused by:') || errStr.contains('Exception in:'))
+            throw new GradleException(formatErrMsg('Exception', errStr))
     }
 }
 
