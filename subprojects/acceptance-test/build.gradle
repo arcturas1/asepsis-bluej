@@ -12,7 +12,7 @@ ErrorOutputListener errOut = new ErrorOutputListener()
 cucumber {
     formats = ['pretty', "html:$buildDir/reports/cucumber"]
     gluePackages = ['asepsis.bluej.test.acceptance']
-    environmentVars = ['bluej-jar':file("$selectedBluejDir/lib/bluej.jar").absolutePath]
+    environmentVars = ['bluej-jar':file("$selectedBluejDir/lib/bluej.jar").absolutePath, 'extensionPackage':getExtensionPackage()]
     if (project.hasProperty('slowSwing')) environmentVars << ['slowSwing':true]
     if (project.hasProperty('tag')) tags = [tag]
 
@@ -40,6 +40,11 @@ String formatErrMsg(String errType, String errOutput) {
             "$errType detected in Cucumber output. Please review the output and the log below.\n" +
             "==================================================================================\n" +
             errOutput
+}
+
+String getExtensionPackage() {
+    def matcher = (project(':bluej-extension').buildFile.text =~ /'Main-Class': '(.*)\.BluejExtension'/ )
+    return matcher[0][1]
 }
 
 class ErrorOutputListener implements StandardOutputListener {

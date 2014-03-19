@@ -1,30 +1,39 @@
 package asepsis.bluej.test.acceptance.support;
 
-import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
+import org.fest.swing.exception.EdtViolationException;
 
 import javax.swing.*;
 
 import static org.fest.reflect.core.Reflection.staticMethod;
 
-public class BluejExtensionEDTOfficer extends FailOnThreadViolationRepaintManager {
-    public static FailOnThreadViolationRepaintManager install() {
+/**
+ * Custom version of CheckThreadViolationRepaintManager that ignores thread violations
+ * in BlueJ except those from the extension.
+ */
+public class BluejExtensionEdtOfficer extends CheckThreadViolationRepaintManager {
+    public static BluejExtensionEdtOfficer install() {
         Object m = currentRepaintManager();
-        if (m instanceof BluejExtensionEDTOfficer) return (BluejExtensionEDTOfficer)m;
+        if (m instanceof BluejExtensionEdtOfficer) return (BluejExtensionEdtOfficer)m;
         return installNew();
     }
 
     @Override
     public void addDirtyRegion(JComponent component, int x, int y, int w, int h) {
-        if (isFromBluej(component))
-            return;
-        super.addDirtyRegion(component, x, y, w, h);
+        if (!isFromBluej())
+            super.addDirtyRegion(component, x, y, w, h);
     }
 
     @Override
     public synchronized void addInvalidComponent(JComponent component) {
-        if (isFromBluej(component))
-            return;
-        super.addInvalidComponent(component);
+        if (!isFromBluej())
+            super.addInvalidComponent(component);
+    }
+
+    @Override
+    public void violationFound(JComponent c, StackTraceElement[] stackTraceElements) {
+        EdtViolationException e = new EdtViolationException("EDT violation detected");
+        if (stackTraceElements != null) e.setStackTrace(stackTraceElements);
+        throw e;
     }
 
     private static Object currentRepaintManager() {
@@ -38,18 +47,19 @@ public class BluejExtensionEDTOfficer extends FailOnThreadViolationRepaintManage
         }
     }
 
-    private static FailOnThreadViolationRepaintManager installNew() {
-        BluejExtensionEDTOfficer m = new BluejExtensionEDTOfficer();
+    private static BluejExtensionEdtOfficer installNew() {
+        BluejExtensionEdtOfficer m = new BluejExtensionEdtOfficer();
         setCurrentManager(m);
         return m;
     }
 
-    private boolean isFromBluej(JComponent c) {
+    private boolean isFromBluej() {
+        String extensionPackage = System.getProperty("extensionPackage");
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        for (int i = 3; i < stackTrace.length; i++) {
+        for (int i = 3; i < stackTrace.length; i++) { // Skip getStackTrace(), isFromBlueJ() and calling method
             if (stackTrace[i].getClassName().startsWith("bluej"))
                 return true;
-            if (stackTrace[i].getClassName().startsWith("asepsis.bluej"))
+            if (stackTrace[i].getClassName().startsWith(extensionPackage))
                 return false;
         }
         return false;
