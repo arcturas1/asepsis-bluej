@@ -26,7 +26,6 @@ Feature: Setup hand-in
     When I close the project
     Then I should not be able to setup the project
 
-  @wip
   Scenario: Setup status is local to project
     When I ask ASEPSiS to setup the project with a course and an assignment
     And I accept the setup
