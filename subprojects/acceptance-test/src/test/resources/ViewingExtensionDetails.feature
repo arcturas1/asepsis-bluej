@@ -6,7 +6,6 @@ Feature: viewing extension details
   Background:
     Given I open the installed extensions window
 
-  @wip
   Scenario: viewing extension details
     When I open the extension details window
     Then I should see the extensions name

@@ -122,14 +122,18 @@ public class Init {
         return starterThread;
     }
 
-    private static void quitBluej() {
+    private static void quitBluej() throws InterruptedException {
         for (Window w : Window.getWindows()) {
             if (!w.getClass().getSimpleName().equals("PkgMgrFrame"))
                 w.dispose();
         }
 
         JemmyProperties.setCurrentTimeout("DialogWaiter.WaitDialogTimeout", 1000);
-        new JMenuBarOperator(mainFrame).pushMenu("Project|Quit");
+        if (System.getProperty("slowSwing") != null)
+            new JMenuBarOperator(mainFrame).pushMenu("Project|Quit");
+        else
+            new JMenuBarOperator(mainFrame).pushMenuNoBlock("Project|Quit");
+
         try {
             JDialogOperator dlg = new JDialogOperator("BlueJ:  Question");
             new JButtonOperator(dlg, "Quit All").push();
