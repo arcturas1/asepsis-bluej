@@ -7,7 +7,7 @@ import asepsis.bluej.gui.event.EventListener;
 import asepsis.bluej.gui.eventbus.SetupProjectCanceledEvent;
 import asepsis.bluej.gui.eventbus.SetupProjectCompletedEvent;
 import asepsis.bluej.gui.eventbus.SetupProjectRequestEvent;
-import asepsis.bluej.repository.CourseRepository;
+import asepsis.bluej.domain.CourseRepository;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 

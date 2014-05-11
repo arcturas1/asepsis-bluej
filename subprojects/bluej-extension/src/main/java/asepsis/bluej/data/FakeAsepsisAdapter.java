@@ -1,4 +1,4 @@
-package asepsis.bluej.datalayer;
+package asepsis.bluej.data;
 
 import asepsis.bluej.domain.Assignment;
 import asepsis.bluej.domain.Course;

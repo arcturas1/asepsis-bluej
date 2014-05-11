@@ -1,4 +1,4 @@
-package asepsis.bluej.gui;
+package asepsis.bluej;
 
 public interface Labeller {
     String getLabel(String key);

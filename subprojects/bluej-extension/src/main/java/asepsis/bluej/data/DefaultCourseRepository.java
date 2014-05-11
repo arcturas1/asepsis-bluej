@@ -1,7 +1,7 @@
-package asepsis.bluej.datalayer;
+package asepsis.bluej.data;
 
 import asepsis.bluej.domain.Course;
-import asepsis.bluej.repository.CourseRepository;
+import asepsis.bluej.domain.CourseRepository;
 
 import java.util.List;
 

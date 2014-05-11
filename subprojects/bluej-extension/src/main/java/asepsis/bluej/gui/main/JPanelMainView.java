@@ -1,6 +1,6 @@
 package asepsis.bluej.gui.main;
 
-import asepsis.bluej.gui.Labeller;
+import asepsis.bluej.Labeller;
 import asepsis.bluej.gui.event.EventListener;
 
 import javax.swing.*;
@@ -15,6 +15,7 @@ public class JPanelMainView extends JPanel implements MainView {
 
     public JPanelMainView(Labeller labeller) {
         this.labeller = labeller;
+        this.setName("asepsis.mainview");
         initComponents();
         buildContent();
     }

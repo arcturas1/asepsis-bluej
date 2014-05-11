@@ -1,6 +1,6 @@
 package asepsis.bluej.test;
 
-import asepsis.bluej.gui.BluejLabeller;
+import asepsis.bluej.BluejLabeller;
 import bluej.extensions.BlueJ;
 import org.junit.Test;
 import org.junit.runner.RunWith;

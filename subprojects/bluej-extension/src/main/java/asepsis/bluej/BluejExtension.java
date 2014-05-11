@@ -1,6 +1,5 @@
 package asepsis.bluej;
 
-import asepsis.bluej.gui.ExtensionController;
 import bluej.extensions.BlueJ;
 import bluej.extensions.Extension;
 

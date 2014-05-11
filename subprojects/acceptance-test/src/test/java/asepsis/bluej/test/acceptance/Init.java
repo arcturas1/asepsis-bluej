@@ -9,24 +9,32 @@ import org.fest.swing.core.BasicRobot;
 import org.fest.swing.core.Robot;
 import org.fest.swing.security.NoExitSecurityManagerInstaller;
 import org.netbeans.jemmy.JemmyProperties;
+import org.netbeans.jemmy.TimeoutExpiredException;
 import org.netbeans.jemmy.drivers.InputDriverInstaller;
+import org.netbeans.jemmy.operators.JButtonOperator;
+import org.netbeans.jemmy.operators.JDialogOperator;
 import org.netbeans.jemmy.operators.JFrameOperator;
+import org.netbeans.jemmy.operators.JMenuBarOperator;
 
+import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import static java.lang.ClassLoader.getSystemClassLoader;
+
 /**
  * General setup for Cucumber and Jemmy.
  */
 public class Init {
-    private Robot cleaningRobot;
-    private Thread t;
-    private static JFrameOperator mainFrame;
+    private Thread starterThread;
     private NoExitSecurityManagerInstaller sec;
+    private static JFrameOperator mainFrame;
     private static File tempDir1;
     private static File tempDir2;
 
@@ -41,8 +49,34 @@ public class Init {
     public static String getTempDir1() {
         return tempDir1.getAbsolutePath();
     }
+
     public static String getTempDir2() {
         return tempDir2.getAbsolutePath();
+    }
+
+    /**
+     * Starts BlueJ in a new thread.
+     */
+    @Before
+    public void before() {
+        createTempDirs();
+        configureJemmy();
+        sec = NoExitSecurityManagerInstaller.installNoExitSecurityManager();
+        BluejExtensionEdtOfficer.install();
+        starterThread = startBluej();
+        mainFrame = new JFrameOperator("BlueJ");
+    }
+
+    /**
+     * Shuts down BlueJ and kills the starting thread.
+     */
+    @After
+    public void after(){
+        starterThread.stop();
+        quitBluej();
+        sec.uninstall();
+        System.gc();
+        deleteTempDirs();
     }
 
     private void createTempDirs() {
@@ -68,59 +102,37 @@ public class Init {
         JemmyProperties.setCurrentTimeout("ComponentOperator.WaitComponentTimeout", 5000);
     }
 
-    /**
-     * Starts BlueJ in a new thread.
-     */
-    @Before
-    public void before() throws InterruptedException, InvocationTargetException {
-        createTempDirs();
-        configureJemmy();
-        cleaningRobot = BasicRobot.robotWithNewAwtHierarchy();
-        sec = NoExitSecurityManagerInstaller.installNoExitSecurityManager();
-        BluejExtensionEdtOfficer.install();
-
-        t = new Thread(new Runnable() {
+    private static Thread startBluej() {
+        Thread starterThread = new Thread(new Runnable() {
             public void run() {
                 File file = new File(System.getProperty("bluej-jar"));
-                URLClassLoader cl = null;
                 try {
-                    cl = new URLClassLoader(new URL[]{file.toURI().toURL()}, null);
-                } catch (MalformedURLException e) {
-                }
-
-                Class<?> clazz = null;
-                try {
-                    clazz = cl.loadClass("bluej.Boot");
-                } catch (ClassNotFoundException e) {
-                }
-
-                Method main = null;
-                try {
-                    main = clazz.getMethod("main", String[].class);
-                } catch (NoSuchMethodException e) {
-                }
-
-                try {
+                    URLClassLoader cl = new URLClassLoader(new URL[]{file.toURI().toURL()});
+                    Class<?> clazz = cl.loadClass("bluej.Boot");
+                    Method main = clazz.getMethod("main", String[].class);
                     main.invoke(null, new Object[]{new String[]{}});
                 } catch (Exception e) {
                 }
             }
         });
-        t.start();
-
-        mainFrame = new JFrameOperator("BlueJ");
+        starterThread.start();
+        return starterThread;
     }
 
-    /**
-     * Shuts down BlueJ and kills the starting thread.
-     */
-    @After
-    public void after() throws InterruptedException {
-        t.stop();
-        t.join();
-        cleaningRobot.cleanUp();
-        sec.uninstall();
-        System.gc(); // Allow JVM to cleanup disposed windows
-        deleteTempDirs();
+    private static void quitBluej() {
+        for (Window w : Window.getWindows()) {
+            if (!w.getClass().getSimpleName().equals("PkgMgrFrame"))
+                w.dispose();
+        }
+
+        new JMenuBarOperator(mainFrame).pushMenuNoBlock("Project|Quit");
+        JemmyProperties.setCurrentTimeout("DialogWaiter.WaitDialogTimeout", 1000);
+        try {
+            JDialogOperator dlg = new JDialogOperator("BlueJ:  Question");
+            new JButtonOperator(dlg, "Quit All").push();
+        } catch (TimeoutExpiredException ignored) {}
+        finally {
+            JemmyProperties.setCurrentTimeout("DialogWaiter.WaitDialogTimeout", 5000);
+        }
     }
 }

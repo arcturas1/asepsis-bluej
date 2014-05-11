@@ -1,6 +1,6 @@
 package asepsis.bluej.gui.setupproject;
 
-import asepsis.bluej.gui.Labeller;
+import asepsis.bluej.Labeller;
 import asepsis.bluej.gui.event.EventListener;
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
@@ -137,10 +137,10 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
         builder.appendRow("4dlu");
         builder.nextLine();
 
-        builder.append(courseLabel); builder.append(courseComboBox);
+        builder.append(courseLabel, courseComboBox);
         builder.nextLine();
 
-        builder.append(assignmentLabel); builder.append(assignmentComboBox);
+        builder.append(assignmentLabel,assignmentComboBox);
         builder.nextLine();
 
         builder.appendRow("10dlu");
@@ -151,35 +151,49 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
         buttonBuilder.addButton(okButton, cancelButton);
         buttonBuilder.addGlue();
         builder.append(buttonBuilder.build(), 3);
+        return builder.build();
 
 //        JPanel inputPanel  = new JPanel(new GridBagLayout());
 //        GridBagConstraints c = new GridBagConstraints();
 //
+//        c.gridx = 0; c.gridy = 0; c.gridwidth = 2;
+//        c.insets = new Insets(0,0,10,0);
+//        infoLabel.setPreferredSize(new Dimension(240,32));
+//        inputPanel.add(infoLabel, c);
 //
-//        c.gridx = 0;
-//        c.gridy = 0;
-//        c.gridwidth = 1;
+//        c.gridx = 0; c.gridy = 1; c.gridwidth = 1;
+//        c.insets = new Insets(0,20,0,0);
 //        c.anchor = GridBagConstraints.LINE_END;
 //        inputPanel.add(courseLabel, c);
 //
-//        c.gridx = 1;
-//        c.gridy = 0;
-//        c.gridwidth = 2;
-//        c.insets = new Insets(0, 10, 0, 0);
+//        c.gridx = 1; c.gridy = 1; c.gridwidth = 2;
+//        c.insets = new Insets(0,6,0,0);
 //        c.anchor = GridBagConstraints.LINE_START;
+//        c.fill = GridBagConstraints.HORIZONTAL;
 //        inputPanel.add(courseComboBox, c);
+//        c.fill = GridBagConstraints.NONE;
 //
-//        c.gridx = 0;
-//        c.gridy = 1;
-//        c.gridwidth = 1;
+//        c.gridx = 0; c.gridy = 2; c.gridwidth = 1;
+//        c.insets = new Insets(0,20,0,0);
 //        c.anchor = GridBagConstraints.LINE_END;
 //        inputPanel.add(assignmentLabel, c);
 //
-//        c.gridx = 1;
-//        c.gridy = 1;
-//        c.gridwidth = 2;
+//        c.gridx = 1; c.gridy = 2; c.gridwidth = 2;
+//        c.insets = new Insets(0,6,0,0);
 //        c.anchor = GridBagConstraints.LINE_START;
+//        c.fill = GridBagConstraints.HORIZONTAL;
 //        inputPanel.add(assignmentComboBox, c);
+//        c.fill = GridBagConstraints.NONE;
+//
+//        JPanel buttonPanel = new JPanel();
+//        buttonPanel.add(okButton);
+//        buttonPanel.add(cancelButton);
+//        c.gridx = 0; c.gridy = 3; c.gridwidth = GridBagConstraints.REMAINDER;
+//        c.insets = new Insets(10,0,0,0);
+//        c.fill = GridBagConstraints.HORIZONTAL;
+//        inputPanel.add(buttonPanel, c);
+//
+//        return inputPanel;
 //
 //        JPanel buttonPanel = new JPanel();
 //        buttonPanel.add(okButton);
@@ -191,10 +205,10 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
 //        c.gridwidth = GridBagConstraints.REMAINDER;
 //        inputPanel.add(buttonPanel, c);
 //
-//        infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+//       infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 //        inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        JPanel mainPanel = new JPanel();
-//        mainPanel.setPreferredSize(new Dimension(100,200));
+//       JPanel mainPanel = new JPanel();
+//       mainPanel.setPreferredSize(new Dimension(100,200));
 //        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 //        mainPanel.add(infoLabel);
 //        mainPanel.add(inputPanel);
@@ -203,7 +217,7 @@ public class JDialogSetupProjectView extends JDialog implements SetupProjectView
 //        tP.add(new JButton("Test"));
 //        mainPanel.add(tP);
 
-        return builder.build();
+//        return builder.build();
     }
 
     private void registerAsWindowClosingListener(final EventListener listener) {

@@ -15,8 +15,8 @@ public class SetupHandinSteps {
 
     @When("^I ask ASEPSiS to setup the project with a course and an assignment$")
     public void I_ask_ASEPSiS_to_setup_the_project_with_a_course_and_an_assignment() throws Throwable {
+        Thread.sleep(1000);
         new JButtonOperator(bluejFrame(), new NameComponentChooser("asepsis.sidebar.setupBtn")).pushNoBlock();
-
         setupDlg = new JDialogOperator(bluejFrame(), "Setup handin");
         new JComboBoxOperator(setupDlg, new NameComponentChooser("asepsis.setup.dialog.courseList")).selectItem(0);
         new JComboBoxOperator(setupDlg, new NameComponentChooser("asepsis.setup.dialog.assignmentList")).waitItemSelected("Course1-Assignment1");

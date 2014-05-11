@@ -1,4 +1,4 @@
-package asepsis.bluej.repository;
+package asepsis.bluej.domain;
 
 import asepsis.bluej.domain.Course;
 

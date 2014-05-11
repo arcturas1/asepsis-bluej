@@ -7,7 +7,11 @@ import cucumber.api.java.en.When;
 import org.netbeans.jemmy.operators.*;
 import org.netbeans.jemmy.util.NameComponentChooser;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.List;
 import java.io.File;
+import java.util.*;
 
 import static asepsis.bluej.test.acceptance.Init.bluejFrame;
 import static asepsis.bluej.test.acceptance.Init.getTempDir1;

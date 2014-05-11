@@ -1,5 +1,6 @@
-package asepsis.bluej.gui;
+package asepsis.bluej;
 
+import asepsis.bluej.Labeller;
 import bluej.extensions.BlueJ;
 
 public class BluejLabeller implements Labeller {

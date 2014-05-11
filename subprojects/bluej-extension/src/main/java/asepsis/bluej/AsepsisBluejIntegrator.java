@@ -1,13 +1,15 @@
-package asepsis.bluej.gui;
+package asepsis.bluej;
 
+import asepsis.bluej.Labeller;
 import asepsis.bluej.common.ClassComponentChooser;
-import asepsis.bluej.datalayer.AsepsisAdapter;
-import asepsis.bluej.datalayer.DefaultCourseRepository;
-import asepsis.bluej.datalayer.FakeAsepsisAdapter;
+import asepsis.bluej.data.AsepsisAdapter;
+import asepsis.bluej.data.DefaultCourseRepository;
+import asepsis.bluej.data.FakeAsepsisAdapter;
 import asepsis.bluej.gui.main.*;
 import asepsis.bluej.gui.setupproject.*;
-import asepsis.bluej.repository.CourseRepository;
+import asepsis.bluej.domain.CourseRepository;
 import com.google.common.eventbus.EventBus;
+import org.netbeans.jemmy.util.NameComponentChooser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +37,11 @@ public class AsepsisBluejIntegrator {
         MainView mainView = new JPanelMainView(labeller);
         addMainViewToBlueJ((JPanel) mainView, bluejFrame);
         new MainPresenter(mainView, mainModel);
+    }
+
+    public void removeAsepsisFromBluejFrame(Frame bluejFrame) {
+        JComponent c = findJComponent(bluejFrame, new NameComponentChooser("asepsis.mainview"));
+        c.getParent().remove(c);
     }
 
     private void addMainViewToBlueJ(JPanel mainView, Frame projectFrame) {

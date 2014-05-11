@@ -1,7 +1,7 @@
 package asepsis.bluej.test.datalayer;
 
-import asepsis.bluej.datalayer.AsepsisAdapter;
-import asepsis.bluej.datalayer.DefaultCourseRepository;
+import asepsis.bluej.data.AsepsisAdapter;
+import asepsis.bluej.data.DefaultCourseRepository;
 import asepsis.bluej.domain.Assignment;
 import asepsis.bluej.domain.Course;
 import org.junit.Before;

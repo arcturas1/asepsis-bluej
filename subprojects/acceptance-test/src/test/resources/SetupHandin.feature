@@ -9,6 +9,7 @@ Feature: Setup hand-in
   Scenario: Project is not setup initially
     Then ASEPSiS should say "Not setup"
 
+    @wip
   Scenario: Accepting setup sets up the project
     When I ask ASEPSiS to setup the project with a course and an assignment
     And I accept the setup
