@@ -79,6 +79,7 @@ public class Steps {
     @When("^I create another new project$")
     public void I_create_another_new_project() throws Throwable {
         new JMenuBarOperator(bluejFrame()).pushMenuNoBlock("Project|New Project...");
+        Thread.sleep(200);
         JFileChooserOperator chooser = new JFileChooserOperator( new JDialogOperator(bluejFrame(), "New Project") );
         chooser.chooseFile( new File(getTempDir2(), "testProject2").getAbsolutePath() );
 

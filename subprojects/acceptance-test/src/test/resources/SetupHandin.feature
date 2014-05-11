@@ -6,10 +6,11 @@ Feature: Setup hand-in
   Background:
     Given I create a new project
 
+
   Scenario: Project is not setup initially
     Then ASEPSiS should say "Not setup"
 
-    @wip
+  @wip
   Scenario: Accepting setup sets up the project
     When I ask ASEPSiS to setup the project with a course and an assignment
     And I accept the setup
@@ -20,10 +21,12 @@ Feature: Setup hand-in
     But I cancel the setup
     Then ASEPSiS should say "Not setup"
 
+  @wip
   Scenario: Cannot setup with no project
     When I close the project
     Then I should not be able to setup the project
 
+  @wip
   Scenario: Setup status is local to project
     When I ask ASEPSiS to setup the project with a course and an assignment
     And I accept the setup

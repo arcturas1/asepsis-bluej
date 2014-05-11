@@ -62,7 +62,7 @@ public class Init {
         createTempDirs();
         configureJemmy();
         sec = NoExitSecurityManagerInstaller.installNoExitSecurityManager();
-        BluejExtensionEdtOfficer.install();
+//        BluejExtensionEdtOfficer.install();
         starterThread = startBluej();
         mainFrame = new JFrameOperator("BlueJ");
     }
@@ -71,9 +71,12 @@ public class Init {
      * Shuts down BlueJ and kills the starting thread.
      */
     @After
-    public void after(){
+    public void after() throws InterruptedException {
         starterThread.stop();
+        starterThread.join();
+//        Thread.sleep(2000);
         quitBluej();
+//        Thread.sleep(2000);
         sec.uninstall();
         System.gc();
         deleteTempDirs();
@@ -125,8 +128,8 @@ public class Init {
                 w.dispose();
         }
 
-        new JMenuBarOperator(mainFrame).pushMenuNoBlock("Project|Quit");
         JemmyProperties.setCurrentTimeout("DialogWaiter.WaitDialogTimeout", 1000);
+        new JMenuBarOperator(mainFrame).pushMenu("Project|Quit");
         try {
             JDialogOperator dlg = new JDialogOperator("BlueJ:  Question");
             new JButtonOperator(dlg, "Quit All").push();
